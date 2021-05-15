@@ -5,8 +5,8 @@ var database, food, foodval;
 function preload()
 {
   //load images here
-  dogImg = loadImage("images/dogImg.png");
-  happyDogImg = loadImage("images/dogImg1.png");
+  dogImg = loadImage("/images/dogImg.png");
+  happyDogImg = loadImage("/images/dogImg1.png");
 }
 
 function setup() {
@@ -18,8 +18,8 @@ function setup() {
 
   database = firebase.database();
 
-  food = database.ref('Food');
-  food.on("value",read);
+  foodval = database.ref('Food');
+  foodval.on("value",read);
 
 }
 
@@ -29,20 +29,8 @@ function draw() {
 
   if(keyWentDown(UP_ARROW))
   {
-    if(foodval<=0)
-   {
-     foodval = 0;
-   }else{
-     foodval = foodval-1;
-   }
+    write(Food);
     dog.addImage(happyDogImg);
-    dog.scale = 0.3;
-  }
-
-  if(keyWentUp(UP_ARROW))
-  {
-    dog.addImage(dogImg);
-    dog.scale = 0.3;
   }
 
   drawSprites();
@@ -63,5 +51,12 @@ function read(data)
 
 function write(x)
 {
-   
+  if(x<=0){
+    x = 0;
+  }else{
+    x = x-1;
+  }
+   database.ref('/').update({
+     Food:x
+   })
 }
